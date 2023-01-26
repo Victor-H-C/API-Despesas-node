@@ -1,0 +1,104 @@
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header{
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    color: white;
+    background: #0E2C4D;
+}
+
+.container{
+    max-width: 1080px;
+    margin: 50px auto;
+}
+
+.d-flex{
+    display: flex;
+}
+
+.justify-content-between{
+    justify-content: space-between;
+}
+
+.justify-space-between{
+    justify-content: space-around;
+}
+
+.max-width-700{
+    max-width: 700px;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.mx-auto{
+    margin: 0 auto;
+}
+
+.mr-1{
+    margin-right: 10px;
+}
+
+.w-50{
+    width: 50%;
+}
+
+.w-100{
+    width: 100%;
+}
+
+form input{
+    border: 1px solid black;
+    padding: 1%;
+    border-radius: 5px;
+    height: 40px;
+    margin: 10px 0;
+}
+
+form select{
+    height: 40px;
+    border-radius: 5px;
+}
+
+form input[type="submit"]{
+    background-color: #0E2C4D;
+    color: white;
+}
+
+main table{
+    border-spacing: 0;
+    width: 100%;
+}
+
+main th,main thead{
+    border: 1px solid black;
+}
+
+td{
+    border: 1px solid black;
+    padding: 5px;
+}
+
+button{
+    margin: 10px 0;
+    height: 40px;
+    width: 100px;
+    background: #0E2C4D;
+    color: white;
+}
+
+button a{
+    text-decoration: none;
+    color: white;
+}
