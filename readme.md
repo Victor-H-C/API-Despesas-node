@@ -24,10 +24,10 @@
 * /despesas [POST] -> insere uma despesa
     * params:
         * valor
-        * data
+        * data -> formato: 2023-01-01 10:50:00
         * idcategorias
         * idtipopagamento
-        * cep
+        * cep -> '01001000'
 * /despesas [DELETE] -> exclui despesa
     * params:
         * id

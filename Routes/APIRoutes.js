@@ -37,7 +37,6 @@ router.get('/despesas/tipo', (req, res) =>{
 
 })
 
-
 router.get('/despesas/categoria', (req, res) =>{
 
     const despesas = {
@@ -48,6 +47,7 @@ router.get('/despesas/categoria', (req, res) =>{
 
     const getData = new Promise((resolve, reject) =>{
         db.query(`SELECT * FROM TB_Categorias`, (err, data) =>{
+                            console.log(err)
                             if(err) return err
 
                             data.forEach(despesa => {
@@ -141,7 +141,12 @@ router.get('/despesas/:id', (req, res) =>{
     }
 
     const getData = new Promise((resolve, reject) =>{
-        const sql = `SELECT * FROM TB_Despesas WHERE Id = ${req.params.id}` 
+        const sql = `SELECT despesa.Id, despesa.Valor, despesa.DataCompra, tipo.Tipo, categoria.Nome, categoria.Descricao, despesa.CEP
+        FROM TB_Despesas despesa
+        INNER JOIN TB_TipoPagamento tipo ON
+        despesa.IdTipoPagamento = tipo.IdTipoPagamento
+        INNER JOIN TB_Categorias categoria ON
+        despesa.IdCategorias = categoria.IdCategorias WHERE Id = ${req.params.id}` 
         db.query(sql, (err, data) =>{
                             if(data.length != 0){
                                 if(!data[0].Id){
@@ -197,8 +202,8 @@ router.get('/despesas', (req, res) => {
                 INNER JOIN TB_Categorias categoria ON
                 despesa.IdCategorias = categoria.IdCategorias WHERE YEAR(DataCompra) = YEAR(NOW()) AND MONTH(DataCompra) = MONTH(NOW())`, (err, data) =>{
                             if(err) return err
-
                             data.forEach(despesa => {
+                                despesa.DataCompra = despesa.DataCompra.toLocaleString().replace(',', '').replace('/', '-').replace('/', '-')
                                 despesas.data.push(despesa)
                                 resolve()
                             })
@@ -210,8 +215,7 @@ router.get('/despesas', (req, res) => {
     getData.then(async () =>{
 
         despesas.data.forEach(despesa => {
-            if(despesa.CEP){
-
+            if(despesa.CEP && despesa.CEP.length >= 8){
                 fetch('https://viacep.com.br/ws/'+despesa.CEP+'/json')
                 .then((body) =>{
                     body.json().then((data) =>{
@@ -222,7 +226,6 @@ router.get('/despesas', (req, res) => {
             }
         })
         await sleep(500)
-
 
         res.send(despesas)
     })
@@ -249,7 +252,7 @@ router.post('/despesas', urlencodedParser,  (req, res) =>{
                         TB_Despesas(Valor, DataCompra, IdCategorias, IdTipoPagamento, CEP) 
                         VALUES(${req.body.valor}, '${req.body.data}', ${req.body.idcategorias}, ${req.body.idtipopagamento}, ${req.body.cep})`
             db.query(sql, (err, data) =>{
-                            if(err) return err
+                        if(err) return err
                                 resolve(true)
                             })
                         })
@@ -259,7 +262,6 @@ router.post('/despesas', urlencodedParser,  (req, res) =>{
             db.query(sql, (err, data) =>{
                 if(err) return err
                     response.data = data
-                    console.log(data)
                     resolve(true)
             })
         })
@@ -400,8 +402,6 @@ router.patch('/despesas', (req, res) =>{
                 const getData = new Promise((resolve, reject) =>{
                     const sql = `SELECT * FROM TB_Despesas WHERE Id = ${req.body.id}` 
                     db.query(sql, (err, data) =>{
-                                        console.log(data + 'a')
-
                                         if(err){
                                             console.log('GetUpdated: ' + err)
                                             reject()  
